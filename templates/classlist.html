@@ -1,0 +1,26 @@
+
+{{define "TOPBAR-CONTAINER"}}<div id="topbar-container">
+	<div id="topbar" class="bbs-content">
+		<a id="logo" href="/bbs/">批踢踢實業坊</a>
+		<a class="right small" href="/about.html">關於我們</a>
+		<a class="right small" href="/contact.html">聯絡資訊</a>
+	</div>
+</div>{{end}}
+
+{{define "MAIN-CONTAINER"}}<div id="main-container">
+	<div id="action-bar-container">
+		<div class="action-bar">
+			<div class="btn-group btn-group-cls">
+				<a class="btn" href="/bbs/hotboards.html">熱門看板</a>
+                <a class="btn selected" href="/cls/1">分類看板</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="b-list-container action-bar-margin bbs-screen">
+
+		{{.Boards}}
+        
+	</div>
+</div>{{if .IsHotboardList}} hotboard {{else}} Not hotboard {{end}} {{end}}
+{{define "TITLE"}}分類看板 - 批踢踢實業坊{{end}}

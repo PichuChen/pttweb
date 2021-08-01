@@ -1,0 +1,68 @@
+
+{{define "TOPBAR-CONTAINER"}}<div id="topbar-container">
+	<div id="topbar" class="bbs-content">
+		<a id="logo" href="/bbs/">批踢踢實業坊</a>
+		<span>&rsaquo;</span>
+		<a class="board" href="/bbs/SYSOP/index.html"><span class="board-label">看板 </span>{{.Board.BrdName}}</a>
+		<a class="right small" href="/about.html">關於我們</a>
+		<a class="right small" href="/contact.html">聯絡資訊</a>
+	</div>
+</div>{{end}}
+{{define "MAIN-CONTAINER"}}<div class="main-container">
+	<div id="action-bar-container">
+		<div class="action-bar">
+			<div class="btn-group btn-group-dir">
+				<a class="btn selected" href="/bbs/SYSOP/index.html">看板</a>
+				<a class="btn" href="/man/SYSOP/index.html">精華區</a>
+			</div>
+			<div class="btn-group btn-group-paging">
+				<a class="btn wide" href="{{.FirstPage}}">最舊</a>
+				<a class="btn wide" href="{{.PrevPage}}">&lsaquo; 上頁</a>
+				<a class="btn wide disabled">下頁 &rsaquo;</a>
+				<a class="btn wide" href="{{.LastPage}}">最新</a>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="r-list-container action-bar-margin bbs-screen">
+		<div class="search-bar">
+			<form type="get" action="search" id="search-bar">
+				<input class="query" type="text" name="q" value="" placeholder="搜尋文章&#x22ef;">
+			</form>
+		</div>
+
+		{{range $article := .Articles}}
+		<div class="r-ent">
+			<div class="nrec">{{colored_counter $article.Recommend}}</div>
+			<div class="title">
+			
+				<a href="/bbs/{{$.Board.BrdName}}/{{$article.FileName}}.html">{{$article.Title}}</a>
+			
+			</div>
+			<div class="meta">
+				<div class="author">{{$article.Owner}}</div>
+				<div class="article-menu">
+					<div class="trigger">&#x22ef;</div>
+					<div class="dropdown">
+						<div class="item"><a href="/bbs/SYSOP/search?q={{route_search_thread $.Board $article.Title }}">搜尋同標題文章</a></div>
+						
+						<div class="item"><a href="/bbs/SYSOP/search?q={{route_search_author $.Board $article.Owner }}">搜尋看板內 {{$article.Owner}} 的文章</a></div>
+					</div>
+				</div>
+				<div class="date">{{$article.Date}}</div>
+				<div class="mark"></div>
+			</div>
+		</div>
+			
+		{{end}}
+	</div>
+</div>{{end}}
+
+{{define "RECOMMOND"}}
+
+	{{.}}
+
+{{end}}
+
+{{define "TITLE"}}看板 {{.Board.BrdName}} 文章列表 - 批踢踢實業坊{{end}}
