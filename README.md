@@ -28,7 +28,7 @@ Put them into a JSON-encoded file.
 Compile
 -------
 
-If you want to compile boardd in pttbbs in Ubuntu, you may want to install `libgrpc++-dev` and `protobuf-compiler-grpc` first
+If you want to compile boardd in pttbbs in Ubuntu, you may want to install `libgrpc++-dev`, `libgflags-dev` and `protobuf-compiler-grpc` first
 
 Template
 --------
