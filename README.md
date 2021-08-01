@@ -24,6 +24,12 @@ Put them into a JSON-encoded file.
 
     $ ./pttweb -conf config.json
 
+
+Compile
+-------
+
+If you want to compile boardd in pttbbs in Ubuntu, you may want to install `libgrpc++-dev` and `protobuf-compiler-grpc` first
+
 Template
 --------
 
