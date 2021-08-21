@@ -1,0 +1,26 @@
+
+{{define "TOPBAR-CONTAINER"}}<div id="topbar-container">
+	<div id="topbar" class="bbs-content">
+		<a id="logo" href="/bbs/">批踢踢實業坊</a>
+		<span>&rsaquo;</span>
+		<a class="board" href="/bbs/SYSOP/index.html"><span class="board-label">看板 </span>{{.Board.BrdName}}</a>
+		<a class="right small" href="/about.html">關於我們</a>
+		<a class="right small" href="/contact.html">聯絡資訊</a>
+	</div>
+</div>
+<div id="navigation-container">
+	<div id="navigation" class="bbs-content">
+		<a class="board" href="/bbs/Test/index.html">返回看板</a>
+		<div class="bar"></div>
+	</div>
+</div>{{end}}
+
+{{define "MAIN-CONTAINER"}}<div id="main-container">
+	<div id="main-content" class="bbs-screen bbs-content">{{.Content}}</div>
+	
+    <div id="article-polling" data-pollurl="{{.PollUrl}}" data-longpollurl="{{.LongPollUrl}}" data-offset="{{.CurrOffset}}"></div>
+{{.ContentTail}}
+</div>{{end}}
+
+
+{{define "TITLE"}}{{.Title}} - 看板 {{.Board.BrdName}} - 批踢踢實業坊{{end}}
