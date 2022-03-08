@@ -1,0 +1,24 @@
+
+{{define "TOPBAR-CONTAINER"}}<div id="topbar-container">
+	<div id="topbar" class="bbs-content">
+		<a id="logo" href="/bbs/">批踢踢實業坊</a>
+		<span>&rsaquo;</span>
+		<a class="board" href="/man/{{.Board.BrdName}}/index.html"><span class="board-label">精華區<sup>beta</sup></span>{{.Board.BrdName}}</a>
+		<a class="right small" href="/about.html">關於我們</a>
+		<a class="right small" href="/contact.html">聯絡資訊</a>
+	</div>
+</div>
+<div id="navigation-container">
+	<div id="navigation" class="bbs-content">
+		<a class="board" href="/man/{{.Board.BrdName}}/{{.Path}}/../index.html">返回上層</a>
+		<div class="bar"></div>
+	</div>
+</div>{{end}}
+
+{{define "MAIN-CONTAINER"}}<div id="main-container">
+	<div id="main-content" class="bbs-screen bbs-content">{{.Content}}</div>
+{{.ContentTail}}
+</div>{{end}}
+
+
+{{define "TITLE"}}{{.Title}} - 看板 {{.Board.BrdName}} - 批踢踢實業坊{{end}}

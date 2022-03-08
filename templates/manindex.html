@@ -1,0 +1,41 @@
+
+{{define "TOPBAR-CONTAINER"}}<div id="topbar-container">
+	<div id="topbar" class="bbs-content">
+		<a id="logo" href="/bbs/">批踢踢實業坊</a>
+		<span>&rsaquo;</span>
+		<a class="board" href="/man/{{.Board.BrdName}}/index.html"><span class="board-label">精華區<sup>beta</sup></span>{{.Board.BrdName}}</a>
+		<a class="right small" href="/about.html">關於我們</a>
+		<a class="right small" href="/contact.html">聯絡資訊</a>
+	</div>
+</div>
+<div id="navigation-container">
+	<div id="navigation" class="bbs-content">
+		<a class="board" href="/man/{{.Board.BrdName}}/{{.Path}}/../index.html">返回上層</a>
+		<div class="bar"></div>
+	</div>
+</div>{{end}}
+
+{{define "MAIN-CONTAINER"}}<div id="main-container">
+	<div id="action-bar-container">
+		<div class="action-bar">
+			<div class="btn-group btn-group-dir">
+				<a class="btn" href="/bbs/{{.Board.BrdName}}/index.html">看板</a>
+				<a class="btn selected" href="/man/{{.Board.BrdName}}/index.html">精華區</a>
+			</div>
+		</div>
+	</div>
+	{{.Path}}
+	<div class="m-list-container bbs-screen">
+
+		{{range $entry := .Entries}}
+		<div class="m-ent">
+			<div class="title">
+				<a href="{{if $entry.IsDir}}/man/{{$entry.BoardName}}/{{$entry.Path}}/index.html{{else}}/man/{{$entry.BoardName}}/{{$entry.Path}}.html{{end}}">{{$entry.Title}}</a>
+			</div>
+		</div>
+		{{end}}
+	</div>
+</div>{{end}}
+
+
+{{define "TITLE"}}精華區 {{.Board.BrdName}} 文章列表 - 批踢踢實業坊{{end}}
