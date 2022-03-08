@@ -6,6 +6,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"hash/fnv"
 	"html/template"
 	"log"
 	"net"
@@ -28,6 +29,7 @@ import (
 	"github.com/ptt/pttweb/atomfeed"
 	"github.com/ptt/pttweb/cache"
 	"github.com/ptt/pttweb/captcha"
+	"github.com/ptt/pttweb/extcache"
 	"github.com/ptt/pttweb/page"
 	manpb "github.com/ptt/pttweb/proto/man"
 	"github.com/ptt/pttweb/pttbbs"
@@ -54,6 +56,7 @@ var pttSearch pttbbs.Pttbbs
 var mand manpb.ManServiceClient
 var router *mux.Router
 var cacheMgr *cache.CacheManager
+var extCache extcache.ExtCache
 var atomConverter *atomfeed.Converter
 
 var configPath string
@@ -78,6 +81,8 @@ func loadConfig() error {
 }
 
 func main() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+
 	flag.Parse()
 
 	if err := loadConfig(); err != nil {
@@ -109,6 +114,9 @@ func main() {
 
 	// Init cache manager
 	cacheMgr = cache.NewCacheManager(config.MemcachedAddress, config.MemcachedMaxConn)
+
+	// Init extcache module if configured
+	extCache = extcache.New(config.ExtCacheConfig)
 
 	// Init atom converter.
 	atomConverter = &atomfeed.Converter{
@@ -946,4 +954,10 @@ func manSelectType(m pttbbs.SelectMethod) manpb.ArticleRequest_SelectType {
 	default:
 		panic("unknown select type")
 	}
+}
+
+func fastStrHash64(s string) uint64 {
+	h := fnv.New64()
+	_, _ = h.Write([]byte(s))
+	return h.Sum64()
 }

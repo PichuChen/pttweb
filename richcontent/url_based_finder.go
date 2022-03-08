@@ -5,8 +5,8 @@ import (
 	"html"
 	"net/url"
 	"regexp"
-	"strings"
 
+	"github.com/ptt/pttweb/extcache"
 	"golang.org/x/net/context"
 )
 
@@ -37,8 +37,7 @@ type UrlPattern struct {
 
 var defaultUrlPatterns = []*UrlPattern{
 	newUrlPattern(`^https?://(?:www\.youtube\.com/watch\?(?:.+&)*v=|youtu\.be/)([\w\-]+)`, handleYoutube),
-	newUrlPattern(`^https?://i\.imgur\.com/([\w]+)\.(?i:png|jpeg|jpg|gif)$`, handleImgur), // Note: cuz some users use http
-	newUrlPattern(`^https?://imgur\.com/([,\w]+)(?:\#(\d+))?[^/]*$`, handleImgur),
+	newUrlPattern(`^https?://i\.imgur\.com/([\w]+)\.((?i)png|jpeg|jpg|gif)$`, handleImgurSingle), // Note: cuz some users use http
 	newUrlPattern(`^http://picmoe\.net/d\.php\?id=(\d+)`, handlePicmoe),
 	newUrlPattern(`\.(?i:png|jpeg|jpg|gif)$`, handleGenericImage),
 }
@@ -51,7 +50,7 @@ func newUrlPattern(pattern string, handler UrlPatternHandler) *UrlPattern {
 }
 
 func imageHtmlTag(urlString string) string {
-	return fmt.Sprintf(`<img src="%s" alt="" />`, html.EscapeString(urlString))
+	return fmt.Sprintf(`<img src="%s" alt="" loading="lazy" />`, html.EscapeString(urlString))
 }
 
 // Handlers
@@ -69,15 +68,25 @@ func handleSameSchemeImage(ctx context.Context, urlBytes []byte, match MatchIndi
 	return []Component{MakeComponent(imageHtmlTag(string(match.ByteSliceOf(urlBytes, 1))))}, nil
 }
 
-func handleImgur(ctx context.Context, urlBytes []byte, match MatchIndices) ([]Component, error) {
-	var comps []Component
-	for _, id := range strings.Split(string(match.ByteSliceOf(urlBytes, 1)), ",") {
-		escapedId := url.PathEscape(id)
-		comps = append(comps, MakeComponent(
-			fmt.Sprintf(`<blockquote class="imgur-embed-pub" lang="en" data-id="%s"><a href="//imgur.com/%s"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>`, escapedId, escapedId),
-		))
+func handleImgurSingle(ctx context.Context, urlBytes []byte, match MatchIndices) ([]Component, error) {
+	cache, _ := extcache.FromContext(ctx)
+	if cache == nil {
+		return nil, nil
 	}
-	return comps, nil
+	id := string(match.ByteSliceOf(urlBytes, 1))
+	ext := string(match.ByteSliceOf(urlBytes, 2))
+	// Use at biggest large image.
+	if n := len(id); n > 0 && id[n-1] == 'h' {
+		id = id[:n-1] + "l"
+	} else {
+		id += "l"
+	}
+	escapedId := url.PathEscape(id + "." + ext)
+	src, err := cache.Generate("https://i.imgur.com/" + escapedId)
+	if err != nil {
+		return nil, nil // Silently ignore
+	}
+	return []Component{MakeComponent(imageHtmlTag(src))}, nil
 }
 
 func handlePicmoe(ctx context.Context, urlBytes []byte, match MatchIndices) ([]Component, error) {
