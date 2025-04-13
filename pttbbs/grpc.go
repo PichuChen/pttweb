@@ -5,6 +5,8 @@ import (
 	"time"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/backoff"
+	"google.golang.org/grpc/credentials/insecure"
 
 	apipb "github.com/ptt/pttweb/proto/api"
 )
@@ -16,7 +18,11 @@ type GrpcRemotePtt struct {
 }
 
 func NewGrpcRemotePtt(boarddAddr string) (*GrpcRemotePtt, error) {
-	conn, err := grpc.Dial(boarddAddr, grpc.WithInsecure(), grpc.WithBackoffMaxDelay(time.Second*5))
+	conn, err := grpc.NewClient(boarddAddr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithConnectParams(grpc.ConnectParams{
+			Backoff: backoff.Config{MaxDelay: time.Second * 5}}),
+	)
 	if err != nil {
 		return nil, err
 	}

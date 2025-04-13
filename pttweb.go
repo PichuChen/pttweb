@@ -22,7 +22,9 @@ import (
 	"time"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/backoff"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials/insecure"
 
 	"golang.org/x/net/context"
 
@@ -106,11 +108,16 @@ func main() {
 	}
 
 	// Init mand connection
-	if conn, err := grpc.Dial(config.MandAddress, grpc.WithInsecure(), grpc.WithBackoffMaxDelay(time.Second*5)); err != nil {
+	conn, err := grpc.NewClient(config.MandAddress,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithConnectParams(grpc.ConnectParams{
+			Backoff: backoff.Config{MaxDelay: time.Second * 5}}),
+	)
+	if err != nil {
 		log.Fatal("cannot connect to mand:", config.MandAddress, err)
-	} else {
-		mand = manpb.NewManServiceClient(conn)
+		return
 	}
+	mand = manpb.NewManServiceClient(conn)
 
 	// Init cache manager
 	cacheMgr = cache.NewCacheManager(config.MemcachedAddress, config.MemcachedMaxConn)
