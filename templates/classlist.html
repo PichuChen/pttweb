@@ -12,7 +12,7 @@
 		<div class="action-bar">
 			<div class="btn-group btn-group-cls">
 				<a class="btn{{if .IsHotboardList}} selected{{end}}" href="/bbs/hotboards.html">熱門看板</a>
-                <a class="btn{{if not .IsHotboardList}} selected{{end}}" href="/cls/5">分類看板</a>
+                <a class="btn{{if not .IsHotboardList}} selected{{end}}" href="/cls/1">分類看板</a>
 			</div>
 		</div>
 	</div>
@@ -29,7 +29,7 @@
                 <div class="board-name">{{$board.BrdName}}</div>
                 <div class="board-nuser">{{decorate_board_nuser $board.Nuser}}</div>
                 <div class="board-class">{{$board.Class}}</div>
-                <div class="board-title">{{$board.Title}}</div>
+                <div class="board-title">{{if eq $board.IsBoard true -}}&#9678;{{- else -}}&#931;{{- end -}}{{$board.Title}}</div>
             </a>
 		</div>
 		{{end}}
