@@ -23,7 +23,7 @@ Install [grpc](https://grpc.io/docs/languages/go/quickstart/)
 
     $ cd proto
     $ make
-    $ ../
+    $ cd ../
     $ go build
 
 
