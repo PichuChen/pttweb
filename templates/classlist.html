@@ -11,8 +11,8 @@
 	<div id="action-bar-container">
 		<div class="action-bar">
 			<div class="btn-group btn-group-cls">
-				<a class="btn" href="/bbs/hotboards.html">熱門看板</a>
-                <a class="btn selected" href="/cls/5">分類看板</a>
+				<a class="btn{{if .IsHotboardList}} selected{{end}}" href="/bbs/hotboards.html">熱門看板</a>
+                <a class="btn{{if not .IsHotboardList}} selected{{end}}" href="/cls/5">分類看板</a>
 			</div>
 		</div>
 	</div>
@@ -20,20 +20,19 @@
 	<div class="b-list-container action-bar-margin bbs-screen">
 		{{range $board := .Boards}}
 		<div class="b-ent">
-            <a class="board" href="{{if eq $board.IsBoard true}}
+            <a class="board" href="{{if eq $board.IsBoard true -}}
             /bbs/{{$board.BrdName}}/index.html
-            {{else}}
+            {{- else -}}
             /cls/{{$board.Bid}}
-            {{end}}
+            {{- end -}}
             ">
                 <div class="board-name">{{$board.BrdName}}</div>
-                <div class="board-nuser"></div>
+                <div class="board-nuser">{{decorate_board_nuser $board.Nuser}}</div>
                 <div class="board-class">{{$board.Class}}</div>
                 <div class="board-title">{{$board.Title}}</div>
             </a>
 		</div>
 		{{end}}
-        
 	</div>
-</div>{{if .IsHotboardList}} hotboard {{else}} Not hotboard {{end}} {{end}}
+</div>{{end}}
 {{define "TITLE"}}分類看板 - 批踢踢實業坊{{end}}
