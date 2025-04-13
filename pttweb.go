@@ -108,16 +108,18 @@ func main() {
 	}
 
 	// Init mand connection
-	conn, err := grpc.NewClient(config.MandAddress,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithConnectParams(grpc.ConnectParams{
-			Backoff: backoff.Config{MaxDelay: time.Second * 5}}),
-	)
-	if err != nil {
-		log.Fatal("cannot connect to mand:", config.MandAddress, err)
-		return
+	if config.MandAddress != "" {
+		conn, err := grpc.NewClient(config.MandAddress,
+			grpc.WithTransportCredentials(insecure.NewCredentials()),
+			grpc.WithConnectParams(grpc.ConnectParams{
+				Backoff: backoff.Config{MaxDelay: time.Second * 5}}),
+		)
+		if err != nil {
+			log.Fatal("cannot connect to mand:", config.MandAddress, err)
+			return
+		}
+		mand = manpb.NewManServiceClient(conn)
 	}
-	mand = manpb.NewManServiceClient(conn)
 
 	// Init cache manager
 	cacheMgr = cache.NewCacheManager(config.MemcachedAddress, config.MemcachedMaxConn)
