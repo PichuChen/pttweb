@@ -1,4 +1,3 @@
-
 {{define "TOPBAR-CONTAINER"}}<div id="topbar-container">
 	<div id="topbar" class="bbs-content">
 		<a id="logo" href="/bbs/">批踢踢欸批批</a>
@@ -17,8 +16,8 @@
 			</div>
 			<div class="btn-group btn-group-paging">
 				<a class="btn wide" href="{{.FirstPage}}">最舊</a>
-				<a class="btn wide" href="{{.PrevPage}}">&lsaquo; 上頁</a>
-				<a class="btn wide disabled">下頁 &rsaquo;</a>
+				<a class="btn wide{{if eq .PrevPage ""}} disabled{{end}}"{{if ne .PrevPage "" }} href="{{.PrevPage}}"{{end}}>&lsaquo; 上頁</a>
+				<a class="btn wide{{if eq .NextPage ""}} disabled{{end}}"{{if ne .NextPage "" }} href="{{.NextPage}}"{{end}}>下頁 &rsaquo;</a>
 				<a class="btn wide" href="{{.LastPage}}">最新</a>
 			</div>
 		</div>
@@ -56,6 +55,10 @@
 		</div>
 			
 		{{end}}
+
+        
+        <div class="r-list-sep"></div>
+		
 	</div>
 </div>{{end}}
 
