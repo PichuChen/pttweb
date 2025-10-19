@@ -21,7 +21,9 @@ func NewGrpcRemotePtt(boarddAddr string) (*GrpcRemotePtt, error) {
 	conn, err := grpc.NewClient(boarddAddr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithConnectParams(grpc.ConnectParams{
-			Backoff: backoff.Config{MaxDelay: time.Second * 5}}),
+			Backoff:           backoff.Config{MaxDelay: time.Second * 5},
+			MinConnectTimeout: time.Second * 5,
+		}),
 	)
 	if err != nil {
 		return nil, err

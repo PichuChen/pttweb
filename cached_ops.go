@@ -41,7 +41,7 @@ func generateBbsIndex(key cache.Key) (cache.Cacheable, error) {
 		Board:   r.Brd,
 		IsValid: true,
 	}
-
+	fmt.Printf("Generating BBS index for %s, page %d, posts: %d\n", r.Brd.BrdName, page, r.Brd.NumPosts)
 	// Handle paging
 	paging := NewPaging(EntryPerPage, r.Brd.NumPosts)
 	if page == 0 {

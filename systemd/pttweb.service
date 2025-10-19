@@ -1,0 +1,31 @@
+[Unit]
+Description=PTTWeb
+Wants=network-online.target
+After=network-online.target
+AssertFileIsExecutable=/var/www/pttapp.cc/pttweb/pttweb
+
+[Service]
+WorkingDirectory=/var/www/pttapp.cc/pttweb
+ExecStart=/var/www/pttapp.cc/pttweb/pttweb --conf /var/www/pttapp.cc/pttweb/config.json
+
+# Let systemd restart this service always
+Restart=always
+
+# Specifies the maximum file descriptor number that can be opened by this process
+LimitNOFILE=1048576
+
+# Turn-off memory accounting by systemd, which is buggy.
+MemoryAccounting=no
+
+# Specifies the maximum number of threads this process can create
+TasksMax=infinity
+
+# Disable timeout logic and wait until process is stopped
+TimeoutSec=infinity
+
+SendSIGKILL=no
+PIDFile=/var/run/pttweb.pid
+ExecStartPre=/bin/rm -f /var/run/pttweb.pid
+
+[Install]
+WantedBy=multi-user.target

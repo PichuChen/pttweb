@@ -1,0 +1,12 @@
+{
+    "Bind": ["tcp:0.0.0.0:9384"],
+    "BoarddAddress": "localhost:3432",
+    "MemcachedAddress": "http://localhost:8080",
+    "TemplateDirectory": "templates",
+    "CaptchaRedisConfig": {
+        "Host": "localhost",
+        "Port": 6379,
+        "Password": "",
+        "DB": 0
+    }
+}
