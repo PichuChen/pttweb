@@ -16,7 +16,17 @@
 {{template "MAIN-CONTAINER" .}}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="//images.ptt.cc/bbs/v2.27/bbs.js"></script>
-	<!-- Google Analytics -->
+{{if ne ga_account ""}}
+<!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id={{ga_account}}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '{{ga_account}}');
+</script>
+<!-- End Google Analytics -->
+{{end}}
 </body>
 </html>
 {{end}}
